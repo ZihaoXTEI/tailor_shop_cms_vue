@@ -2,6 +2,8 @@ import axios from 'axios'
 import type { AxiosInstance } from 'axios'
 import type { MyRequestInterceptors, MyRequestConfig } from './type'
 
+import { notification, message } from 'ant-design-vue'
+
 // import { ElLoading } from 'element-plus'
 // import { LoadingInstance } from 'element-plus/es/components/loading/src/loading'
 
@@ -60,8 +62,16 @@ class MyRequest {
         const data = res.data
 
         if (res.status >= 400) {
-          console.log('请求数据发送错误，请联系网站管理员。')
+          console.log('[]请求数据发送错误，请联系网站管理员。')
+          notification.error({
+            message: '操作错误',
+            description: res.data.message,
+          })
         } else {
+          notification.success({
+            message: '成功',
+            description: res.data.message,
+          })
           return data
         }
       },
@@ -69,8 +79,15 @@ class MyRequest {
         // 关闭页面加载动画
         // this.loading?.close()
 
+        message.error(err.response.data.message)
+
         if (err.response.status >= 400) {
-          console.log('请求数据发送错误，请联系网站管理员。')
+          console.log('！！请求数据发送错误，请联系网站管理员！！')
+          notification.error({
+            message: '操作错误',
+            duration: null,
+            description: err.response.data.message,
+          })
         }
         return Promise.reject(err.response.data)
       },
@@ -127,6 +144,11 @@ class MyRequest {
   // patch 请求
   patch<T = any>(config: MyRequestConfig<T>): Promise<T> {
     return this.request<T>({ ...config, method: 'PATCH' })
+  }
+
+  // put 请求
+  put<T = any>(config: MyRequestConfig<T>): Promise<T> {
+    return this.request<T>({ ...config, method: 'PUT' })
   }
 }
 

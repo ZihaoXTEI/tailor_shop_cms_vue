@@ -7,9 +7,9 @@
       @finish="handleFinish"
       @finish-failed="handleFinishFailed"
     >
-      <a-form-item label="用户" name="username">
+      <a-form-item label="用户" name="nickname">
         <a-input
-          v-model:value="accountInfo.username"
+          v-model:value="accountInfo.nickname"
           placeholder="请输入用户名"
           autocomplete="off"
         >
@@ -80,17 +80,17 @@ export default defineComponent({
     const router = useRouter()
 
     const accountInfo = reactive({
-      username: 'cikao',
+      nickname: 'cikao',
       password: '123456',
       remember: true,
     })
 
     const disabled = computed(() => {
-      return !(accountInfo.username && accountInfo.password)
+      return !(accountInfo.nickname && accountInfo.password)
     })
 
     const rules: Record<string, Rule[]> = {
-      username: [
+      nickname: [
         { required: true, validator: validateUsername, trigger: 'change' },
       ],
       password: [
@@ -100,10 +100,10 @@ export default defineComponent({
 
     const handleFinish: FormProps['onFinish'] = async (values) => {
       console.log('onFinish', values)
-      const { username, password, remember } = values
+      const { nickname, password, remember } = values
       const store = LoginStore()
       try {
-        await store.accountLoginAction({ username, password })
+        await store.accountLoginAction({ nickname, password })
         if (remember) {
           _localStorage.setItem('token', store.token)
         } else {

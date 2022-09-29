@@ -9,10 +9,10 @@
     >
       <template v-for="item in userMenu" :key="item.id">
         <template v-if="item.childMenuList?.length === 0">
-          <a-menu-item :key="item.id">
-            <!-- <template #icon>
+          <a-menu-item :key="item.id" @click="handleMenuItemClick(item.url)">
+            <template #icon>
               <UserOutlined />
-            </template> -->
+            </template>
             {{ item.menuName }}
           </a-menu-item>
         </template>
@@ -28,14 +28,15 @@
 <script lang="ts">
 import { defineComponent, ref, watchEffect } from 'vue'
 
-// import { UserOutlined } from '@ant-design/icons-vue'
+import { UserOutlined } from '@ant-design/icons-vue'
 import NavSubMenu from './nav-sub-menu.vue'
 import { LoginStore } from '../../../store/login/login'
+import { useRouter } from 'vue-router'
 
 export default defineComponent({
   name: 'NavMenu',
   components: {
-    // UserOutlined,
+    UserOutlined,
     NavSubMenu,
   },
   props: {
@@ -45,6 +46,7 @@ export default defineComponent({
     },
   },
   setup(props) {
+    const router = useRouter()
     const loginStore = LoginStore()
 
     const userMenu = loginStore.userMenu
@@ -56,10 +58,17 @@ export default defineComponent({
     })
 
     const selectedKeys = ref<string[]>(['1'])
+
+    const handleMenuItemClick = (url: string) => {
+      console.log(url)
+      router.push(`/main${url}`)
+    }
     return {
       isCollapsed,
       selectedKeys,
       userMenu,
+
+      handleMenuItemClick,
     }
   },
 })
@@ -74,7 +83,7 @@ export default defineComponent({
 }
 
 .menu {
-  height: calc(100% - 55px);
+  height: calc(100% - 65px);
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: none; /* firefox */

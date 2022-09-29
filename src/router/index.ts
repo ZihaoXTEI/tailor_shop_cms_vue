@@ -1,8 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 import type { RouteRecordRaw } from 'vue-router'
 import { _sessionStorage } from '../utils/storge'
 import StorageKey from '../constants/storageKey'
+import { LoginStore } from '../store/login/login'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -24,14 +25,15 @@ const routes: RouteRecordRaw[] = [
 
 const router = createRouter({
   routes,
-  history: createWebHistory(),
+  history: createWebHashHistory(),
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   if (to.path !== '/login') {
     const token = _sessionStorage.getItem(
       `${StorageKey.STORE_PREFIX}-login`,
     )?.token
+
     if (!token) {
       return '/login'
     }

@@ -2,20 +2,16 @@
   <a-layout class="container">
     <nav-menu :collapsed="collapsed"></nav-menu>
 
-    <a-layout>
+    <a-layout class="page">
       <nav-header @collapsed-change="handleCollapsedChange"></nav-header>
 
-      <a-layout-content
-        :style="{
-          margin: '24px 16px',
-          padding: '24px',
-          background: '#fff',
-          minHeight: '280px',
-        }"
-      >
-        Content
+      <a-layout-content class="page-content">
         <router-view></router-view>
       </a-layout-content>
+
+      <a-layout-footer class="page-footer">
+        Tailors CMS ©2022 Created by Cikao
+      </a-layout-footer>
     </a-layout>
   </a-layout>
 </template>
@@ -54,10 +50,26 @@ export default defineComponent({
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 }
 
 .site-layout .site-layout-background {
   background: #fff;
+}
+
+.page {
+  height: 100vh;
+  overflow: auto;
+
+  .page-content {
+    margin: 24px 16px;
+    min-height: initial;
+    // height: calc(100vh - 64px);
+  }
+
+  .page-footer {
+    text-align: center;
+    // background-color: skyblue;
+  }
 }
 </style>

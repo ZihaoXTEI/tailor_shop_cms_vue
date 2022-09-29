@@ -17,15 +17,26 @@ export function mapMenuToRoutes(userMenu: Menu[]): RouteRecordRaw[] {
   const _recurseGetRoute = (userMenu: Menu[]) => {
     for (const menu of userMenu) {
       if (menu.menuLevel === 2) {
-        const menuName = menu.url.split('/').pop() || ''
+        const moduleName = menu.url.split('/')[1] || '' // ['', 'user', 'customer']
+        // console.log(`../views/main${menu.url}/${menu.viewName}.vue`)
+        // console.log(
+        //   `../views/main/${moduleName}/${menu.viewName}/${menu.viewName}.vue`,
+        // )
+        let url: string
+        if (moduleName == 'dashboard') {
+          url = `../views/main/${moduleName}/${menu.viewName}.vue`
+        } else {
+          url = `../views/main/${moduleName}/${menu.viewName}/${menu.viewName}.vue`
+        }
         const route: Route = {
           path: `/main${menu.url}`,
-          name: menuName,
+          name: menu.viewName as string,
           // component: () => import(`@/views/main${menu.url}/${menuName}.vue`),
-          component:
-            modules[
-              /* @vite-ignore */ `../views/main${menu.url}/${menuName}.vue`
-            ],
+
+          // /* @vite-ignore */ `../views/main/${moduleName}/${menu.viewName}/${menu.viewName}.vue`
+          // /* @vite-ignore */ `../views/main${menu.url}/${menu.viewName}.vue`
+
+          component: /* @vite-ignore */ modules[url],
         }
 
         routes.push(route)

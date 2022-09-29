@@ -7,6 +7,7 @@ import StorageKey from '../constants/storageKey'
 const myRequest = new MyRequest({
   baseURL: BASE_URL,
   timeout: TIME_OUT,
+
   interceptors: {
     requestInterceptor: (config) => {
       const token = _sessionStorage.getItem(

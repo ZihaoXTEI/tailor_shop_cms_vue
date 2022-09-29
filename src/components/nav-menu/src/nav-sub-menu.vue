@@ -1,6 +1,6 @@
 <template>
   <a-sub-menu :key="menuInfo.id">
-    <!-- <template #icon><VideoCameraOutlined /></template> -->
+    <template #icon><appstore-outlined /></template>
     <template #title>{{ menuInfo.menuName }}</template>
     <template v-for="item in menuInfo.childMenuList" :key="item.id">
       <template v-if="item.childMenuList?.length === 0">
@@ -23,13 +23,13 @@ import { defineComponent } from 'vue'
 import { useRouter } from 'vue-router'
 // import Menu from '../../../entities/Menu'
 
-// import { VideoCameraOutlined } from '@ant-design/icons-vue'
+import { AppstoreOutlined } from '@ant-design/icons-vue'
 
 export default defineComponent({
   name: 'NavSubMenu',
-  // components: {
-  //   VideoCameraOutlined,
-  // },
+  components: {
+    AppstoreOutlined,
+  },
   props: {
     menuInfo: {
       type: Object,

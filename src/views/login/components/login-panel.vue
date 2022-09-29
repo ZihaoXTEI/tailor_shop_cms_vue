@@ -35,6 +35,8 @@ export default defineComponent({
     onMounted(async () => {
       const localToken = _localStorage.getItem(StorageKey.TOKEN)
       if (localToken) {
+        console.log('在login-panel 中：', localToken)
+
         const store = LoginStore()
         await store.tokenLoginAction(`Bearer ${localToken}`)
         router.push('/main')

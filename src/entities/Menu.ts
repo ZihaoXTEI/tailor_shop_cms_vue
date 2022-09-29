@@ -11,6 +11,8 @@ export default class Menu {
 
   style: string | undefined
 
+  viewName: string | undefined
+
   menuType!: ClientType
 
   menuLevel!: number

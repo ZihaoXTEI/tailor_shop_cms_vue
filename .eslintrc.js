@@ -34,5 +34,8 @@ module.exports = {
     indent: ['error', 2],
     '@typescript-eslint/no-explicit-any': 'off',
     'vue/multi-word-component-names': 'off',
+    'vue/v-on-event-hyphenation': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'vue/no-unused-vars': 'off',
   },
 }

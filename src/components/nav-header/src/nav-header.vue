@@ -1,5 +1,5 @@
 <template>
-  <a-layout-header style="background: #fff; padding: 0">
+  <a-layout-header class="nav-header">
     <menu-unfold-outlined
       v-if="collapsed"
       class="trigger"
@@ -38,6 +38,16 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
+.nav-header {
+  position: sticky;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  background: #fff;
+  padding: 0;
+  box-shadow: 0 8px 50px #bababa;
+}
+
 .trigger {
   font-size: 18px;
   line-height: 64px;
