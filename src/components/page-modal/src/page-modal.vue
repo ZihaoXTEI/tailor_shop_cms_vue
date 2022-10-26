@@ -20,7 +20,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, watch } from 'vue'
+import {
+  defineComponent,
+  onBeforeMount,
+  onBeforeUpdate,
+  PropType,
+  reactive,
+  ref,
+  watch,
+} from 'vue'
 import { Form } from 'ant-design-vue'
 
 import { IForm } from '../../../base-ui/my-form'
@@ -60,30 +68,63 @@ export default defineComponent({
 
     const formData = ref<any>({}) // 表单数据
 
+    onBeforeMount(() => {
+      initFormData()
+    })
+
+    onBeforeUpdate(() => {
+      resetFields()
+    })
+
+    // 初始化表单数据
+    const initFormData = () => {
+      // | 'select'
+      // | 'checkbox'
+      // | 'switch'
+      console.log('initFormData')
+      for (const item of props.modalFormConfig.formItems) {
+        if (item.type === 'inputnumber') {
+          formData.value[`${item.field}`] = 0
+        } else if (item.type === 'rangepicker' || item.type === 'inputrange') {
+          formData.value[`${item.field}`] = []
+        } else if (item.type === 'switch') {
+          formData.value[`${item.field}`] = false
+        } else {
+          formData.value[`${item.field}`] = ''
+        }
+      }
+
+      resetFields()
+    }
+
     watch(
       () => props.modalFormValue,
       (newValue) => {
         for (const item of props.modalFormConfig.formItems) {
-          if (item.field === 'password') continue
+          if (item.type === 'password') continue
           formData.value[`${item.field}`] = newValue[`${item.field}`]
         }
       },
     )
 
     // 表单验证规则
-    const formRules = ref(props.modalFormConfig?.formRules ?? {})
+    const formRules = reactive(props.modalFormConfig?.formRules ?? {})
 
     const { resetFields, validate, validateInfos } = useForm(
       formData,
       formRules,
-      {
-        onValidate: (...args) => console.log(...args),
-      },
     )
 
     // 确认按钮点击事件
     const handleOk = () => {
       confirmLoading.value = true
+      // 合并 formData 数据
+      // formData.value = {
+      //   ...toRaw(formData.value),
+      //   // ...toRaw(props.modalFormValue),
+      // }
+      console.log(formData.value)
+
       validate()
         .then(async () => {
           console.log(formData.value)
@@ -91,10 +132,11 @@ export default defineComponent({
           if (Object.keys(props.modalFormValue).length) {
             // 修改数据
             const id = props.modalFormValue?.id
-            const result = await updateData(props.requestUrl, id, {
-              ...formData.value,
-              // ...props.modalFormValue,
-            })
+            const result = await updateData(
+              props.requestUrl,
+              id,
+              formData.value,
+            )
 
             console.log(result)
           } else {
@@ -107,15 +149,17 @@ export default defineComponent({
 
           setTimeout(() => {
             resetFields()
-            formData.value = {}
+            initFormData()
+
             visible.value = false
             confirmLoading.value = false
           }, 1000)
         })
         .catch((err) => {
           console.log(err)
-          resetFields()
-          formData.value = {}
+          // resetFields()
+          // initFormData()
+
           confirmLoading.value = false
         })
     }

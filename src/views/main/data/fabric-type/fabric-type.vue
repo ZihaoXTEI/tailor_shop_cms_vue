@@ -15,7 +15,30 @@
       @create-data="handleCreateData"
       @edit-data="handleEditData"
       @refresh-data="handleRefreshData"
-    ></page-content>
+    >
+      <template #fabricCategory="{ column, record }">
+        <template
+          v-if="record[column.dataIndex] === FabricCategory.SHELL_FABRIC"
+        >
+          <a-tag color="#F44336"> {{ FabricCategory.SHELL_FABRIC }} </a-tag>
+        </template>
+        <template
+          v-else-if="record[column.dataIndex] === FabricCategory.LINING"
+        >
+          <a-tag color="#7C4DFF"> {{ FabricCategory.LINING }} </a-tag>
+        </template>
+        <template
+          v-else-if="record[column.dataIndex] === FabricCategory.PADDING"
+        >
+          <a-tag color="#FF9800"> {{ FabricCategory.PADDING }} </a-tag>
+        </template>
+        <template
+          v-else-if="record[column.dataIndex] === FabricCategory.INTERMASS"
+        >
+          <a-tag color="#607D8B"> {{ FabricCategory.INTERMASS }} </a-tag>
+        </template>
+      </template>
+    </page-content>
     <page-modal
       ref="pageModalRef"
       :page-name="pageName"
@@ -43,6 +66,7 @@ import { DataAPI } from '../../../../constants/requestApi'
 
 import { usePageModal } from '../../../../hooks/usePageModal'
 import { usePage } from '../../../../hooks/usePage'
+import { FabricCategory } from '../../../../types/entityType'
 
 export default defineComponent({
   name: 'FabricTypePage',
@@ -88,6 +112,8 @@ export default defineComponent({
 
       handleCreateData,
       handleEditData,
+
+      FabricCategory,
     }
   },
 })

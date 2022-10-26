@@ -17,6 +17,8 @@ export const contentTableConfig: ITable = {
     {
       title: '顾客性别',
       dataIndex: 'customerGender',
+      slotName: 'gender',
+      align: 'center',
     },
     {
       title: '顾客联系电话',

@@ -64,14 +64,11 @@ class MyRequest {
         if (res.status >= 400) {
           console.log('[]请求数据发送错误，请联系网站管理员。')
           notification.error({
-            message: '操作错误',
+            message: '错误',
             description: res.data.message,
+            duration: 3,
           })
         } else {
-          notification.success({
-            message: '成功',
-            description: res.data.message,
-          })
           return data
         }
       },
@@ -83,11 +80,6 @@ class MyRequest {
 
         if (err.response.status >= 400) {
           console.log('！！请求数据发送错误，请联系网站管理员！！')
-          notification.error({
-            message: '操作错误',
-            duration: null,
-            description: err.response.data.message,
-          })
         }
         return Promise.reject(err.response.data)
       },

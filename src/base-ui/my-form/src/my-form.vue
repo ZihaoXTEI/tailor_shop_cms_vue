@@ -1,7 +1,7 @@
 <template>
   <div class="my-form">
     <!-- :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }" -->
-    <a-form ref="formRef" autocomplete="off">
+    <a-form ref="formRef" autocomplete="off" v-bind="formLayout">
       <a-row :gutter="[16, 8]" v-bind="rowLayout">
         <template v-for="item in formItems" :key="item.field">
           <a-col v-bind="colLayout">
@@ -54,13 +54,14 @@
               <template v-else-if="item.type === 'select'">
                 <a-select
                   :value="modelValue[`${item.field}`]"
+                  :placeholder="item.placeholder"
                   :options="item.options"
-                  allow-clear
                   v-bind="item.otherOptions"
                   @update:value="handleValueChange($event, item.field)"
                 >
                   <!-- <a-select-option
                     v-for="option in item.options"
+                    :key="option.value"
                     :value="option.value"
                   >
                     {{ option.label }}
@@ -78,7 +79,7 @@
                 </a-date-picker>
               </template>
 
-              <!-- 日期选择器 -->
+              <!-- 日期范围选择器 -->
               <template v-else-if="item.type === 'rangepicker'">
                 <a-range-picker
                   :value="modelValue[`${item.field}`]"
@@ -131,12 +132,17 @@
                 ></a-textarea>
               </template>
 
-              <template v-else-if="item.type === 'custom'">
-                <slot
-                  :name="item.field"
+              <!-- 数字范围 -->
+              <template v-else-if="item.type === 'inputrange'">
+                <my-input-range
                   :value="modelValue[`${item.field}`]"
+                  :other-options="item.otherOptions"
                   @update:value="handleValueChange($event, item.field)"
-                >
+                ></my-input-range>
+              </template>
+
+              <template v-else-if="item.type === 'custom'">
+                <slot :name="item.field" :value="modelValue[`${item.field}`]">
                 </slot>
               </template>
             </a-form-item>
@@ -176,17 +182,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref } from 'vue'
+import { defineComponent, PropType, ref, toRaw, watch } from 'vue'
+
+import MyInputRange from '../../my-input-range'
 
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons-vue'
 
 import type { FormProps } from 'ant-design-vue'
-import { IColLayout, IFormItem, IRowLayout } from './type'
+import { IColLayout, IFormItem, IFormLayout, IRowLayout } from './type'
 import { FormInstance } from 'ant-design-vue/es/form'
 
 export default defineComponent({
   name: 'MyForm',
   components: {
+    MyInputRange,
     CheckOutlined,
     CloseOutlined,
   },
@@ -203,6 +212,11 @@ export default defineComponent({
       type: Object,
       default: () => ({}),
     },
+    formLayout: {
+      type: Object as PropType<IFormLayout>,
+      default: () => ({}),
+    },
+
     rowLayout: {
       type: Object as PropType<IRowLayout>,
       default: () => ({}),
@@ -224,7 +238,8 @@ export default defineComponent({
     const formRef = ref<FormInstance>()
 
     const handleValueChange = (value: any, field: string) => {
-      emit('update:modelValue', { ...props.modelValue, [field]: value })
+      console.log(field, value)
+      emit('update:modelValue', { ...toRaw(props.modelValue), [field]: value })
     }
 
     // const handleFinish: FormProps['onFinish'] = async (values) => {

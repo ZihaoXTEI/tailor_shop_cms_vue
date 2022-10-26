@@ -13,7 +13,7 @@ export function getDataList(url: string, queryInfo: any) {
 // 根据 ID 获取数据
 export function getDataById(url: string, id: string | number) {
   return myRequest.get<IDataType>({
-    url: `${url}/${id}`,
+    url: `${url}${id}`,
   })
 }
 

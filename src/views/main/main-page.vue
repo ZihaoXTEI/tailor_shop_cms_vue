@@ -1,19 +1,21 @@
 <template>
-  <a-layout class="container">
-    <nav-menu :collapsed="collapsed"></nav-menu>
+  <div class="container">
+    <a-layout>
+      <nav-menu :collapsed="collapsed"></nav-menu>
 
-    <a-layout class="page">
-      <nav-header @collapsed-change="handleCollapsedChange"></nav-header>
+      <a-layout class="page">
+        <nav-header @collapsed-change="handleCollapsedChange"></nav-header>
 
-      <a-layout-content class="page-content">
-        <router-view></router-view>
-      </a-layout-content>
+        <a-layout-content class="content">
+          <router-view></router-view>
+        </a-layout-content>
 
-      <a-layout-footer class="page-footer">
-        Tailors CMS ©2022 Created by Cikao
-      </a-layout-footer>
+        <a-layout-footer class="footer">
+          Tailors CMS ©2022 Created by Cikao
+        </a-layout-footer>
+      </a-layout>
     </a-layout>
-  </a-layout>
+  </div>
 </template>
 
 <script lang="ts">
@@ -61,13 +63,13 @@ export default defineComponent({
   height: 100vh;
   overflow: auto;
 
-  .page-content {
+  .content {
     margin: 24px 16px;
     min-height: initial;
     // height: calc(100vh - 64px);
   }
 
-  .page-footer {
+  .footer {
     text-align: center;
     // background-color: skyblue;
   }

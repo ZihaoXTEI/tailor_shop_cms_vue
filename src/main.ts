@@ -5,8 +5,9 @@ import store from './store'
 import router from './router'
 
 import './style.css'
-import 'normalize.css'
+// import 'normalize.css'
 import './assets/iconfont/iconfont.js'
+import 'ant-design-vue/dist/antd.css'
 
 import { globalRegister } from './global'
 import { _sessionStorage } from './utils/storge'

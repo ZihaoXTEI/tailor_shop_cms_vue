@@ -1,18 +1,33 @@
 <template>
   <a-layout-header class="nav-header">
-    <menu-unfold-outlined
-      v-if="collapsed"
-      class="trigger"
-      @click="handleCollapsedClick"
-    />
-    <menu-fold-outlined v-else class="trigger" @click="handleCollapsedClick" />
+    <div class="header-content">
+      <menu-unfold-outlined
+        v-if="collapsed"
+        class="trigger"
+        @click="handleCollapsedClick"
+      />
+      <menu-fold-outlined
+        v-else
+        class="trigger"
+        @click="handleCollapsedClick"
+      />
+
+      <a-breadcrumb>
+        <template v-for="breadcrumb in breadcrumbList" :key="breadcrumb.path">
+          <a-breadcrumb-item>{{ breadcrumb.name }}</a-breadcrumb-item>
+        </template>
+      </a-breadcrumb>
+    </div>
   </a-layout-header>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue'
+import { useRoute } from 'vue-router'
+import { LoginStore } from '../../../store/login/login'
+import { pathMapBreadcrumbs } from '../../../utils/mapMenu'
 
 export default defineComponent({
   name: 'NavHeader',
@@ -24,6 +39,13 @@ export default defineComponent({
   setup(_, { emit }) {
     const collapsed = ref<boolean>(false)
 
+    const userMenu = LoginStore().userMenu
+    const route = useRoute()
+    console.log('path', route.path)
+    const breadcrumbList = computed(() => {
+      return pathMapBreadcrumbs(userMenu, route.path)
+    })
+
     const handleCollapsedClick = () => {
       collapsed.value = !collapsed.value
       emit('collapsedChange', collapsed.value)
@@ -31,6 +53,8 @@ export default defineComponent({
 
     return {
       collapsed,
+      breadcrumbList,
+
       handleCollapsedClick,
     }
   },
@@ -42,6 +66,7 @@ export default defineComponent({
   position: sticky;
   top: 0;
   right: 0;
+  display: flex;
   z-index: 10;
   background: #fff;
   padding: 0;
@@ -58,5 +83,11 @@ export default defineComponent({
 
 .trigger:hover {
   color: #1890ff;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

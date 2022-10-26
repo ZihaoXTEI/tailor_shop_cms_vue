@@ -14,7 +14,7 @@ export default defineComponent({
   props: {
     cardTitle: {
       type: String,
-      required: true,
+      default: undefined,
     },
   },
   setup() {

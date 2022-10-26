@@ -11,6 +11,8 @@ type IFormType =
   | 'checkbox'
   | 'switch'
   | 'textarea'
+  | 'inputrange'
+  | 'custom'
 
 // 表单内容
 export interface IFormItem {
@@ -68,6 +70,11 @@ export interface IForm {
   labelWidth?: string
 
   /**
+   * a-form 布局
+   */
+  formLayout?: IFormLayout
+
+  /**
    * 每行布局
    */
   rowLayout?: IRowLayout
@@ -81,6 +88,14 @@ export interface IForm {
    * 表单组件样式
    */
   itemStyle?: any
+}
+
+export interface IFormLayout {
+  labelAlign?: 'left' | 'right' // label 标签的文本对齐方式
+  labelCol?: object // label 标签布局。同 <Col> 组件，设置 span offset 值，如 {span: 3, offset: 12} 或 sm: {span: 3, offset: 12}
+  labelWrap?: boolean // label 标签的文本换行方式
+  layout?: 'horizontal' | 'vertical' | 'inline' //表单布局
+  wrapperCol?: object // 需要为输入控件设置布局样式时，使用该属性，用法同 labelCol
 }
 
 export interface IRowLayout {

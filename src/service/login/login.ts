@@ -8,7 +8,7 @@ enum LoginAPI {
   AccountLogin = '/login',
   TokenLogin = '/auth',
   LoginUserInfo = '/user/',
-  UserMenu = '/system/menu/',
+  UserMenu = '/system/menu/list', // 临时
 }
 
 // 用户账户登录请求
@@ -36,7 +36,7 @@ export function getUserInfoById(id: number) {
 
 // 获取登录用户菜单请求
 export function getUserMenuByRoleId() {
-  return myRequest.get<IDataType>({
+  return myRequest.post<IDataType>({
     url: LoginAPI.UserMenu,
     showLoading: false,
   })

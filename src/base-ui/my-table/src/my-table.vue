@@ -6,6 +6,7 @@
       :data-source="tableDataSource"
       :pagination="pagination"
       :loading="isLoading"
+      v-bind="tabelConfig"
       :scroll="{ x: 'max-content', scrollToFirstRowOnChange: true }"
       @change="handleTableChange"
     >
@@ -26,17 +27,24 @@ import { computed, defineComponent, PropType, ref } from 'vue'
 
 // import type { ColumnsType } from 'ant-design-vue/es/table/interface'
 import type { TablePaginationConfig, TableProps } from 'ant-design-vue'
-import { MyColumnsType } from './type'
+import { IColumnsType } from './type'
 // import { usePagination } from 'vue-request'
 
 export default defineComponent({
   name: 'MyTable',
   props: {
     /**
+     * 表格整体配置信息
+     */
+    tabelConfig: {
+      type: Object,
+      default: () => ({}),
+    },
+    /**
      * 表格每列配置信息
      */
     tableColumns: {
-      type: Array as PropType<MyColumnsType[]>,
+      type: Array as PropType<IColumnsType[]>,
       required: true,
     },
     /**
@@ -79,11 +87,17 @@ export default defineComponent({
     // })
 
     // 分页器
-    const pagination = computed(() => ({
-      total: props.tableDataTotal,
-      current: props.pageInfo.currentPage,
-      pageSize: props.pageInfo.pageSize,
-    }))
+    const pagination = computed(() => {
+      if (props.tabelConfig.hiddenPagination) {
+        return false
+      }
+
+      return {
+        total: props.tableDataTotal,
+        current: props.pageInfo.currentPage,
+        pageSize: props.pageInfo.pageSize,
+      }
+    })
 
     const handleTableChange: TableProps['onChange'] = (
       pagination: TablePaginationConfig,

@@ -40,16 +40,16 @@
         <!-- 季节 -->
         <template #season="{ column, record }">
           <template v-if="record[column.dataIndex] === Season.SPRING">
-            <a-tag color="#87d068"> 春天 </a-tag>
+            <a-tag color="#87d068"> {{ Season.SPRING }} </a-tag>
           </template>
           <template v-else-if="record[column.dataIndex] === Season.SUMMER">
-            <a-tag color="#4CAF50"> 夏天 </a-tag>
+            <a-tag color="#4CAF50"> {{ Season.SUMMER }} </a-tag>
           </template>
           <template v-else-if="record[column.dataIndex] === Season.AUTUMN">
-            <a-tag color="#FFC107"> 秋天 </a-tag>
+            <a-tag color="#FFC107"> {{ Season.AUTUMN }} </a-tag>
           </template>
           <template v-else-if="record[column.dataIndex] === Season.WINTER">
-            <a-tag color="#BDBDBD"> 冬天 </a-tag>
+            <a-tag color="#BDBDBD"> {{ Season.WINTER }} </a-tag>
           </template>
         </template>
 
@@ -79,6 +79,14 @@
               中性
             </span>
           </template>
+        </template>
+
+        <!-- 图片组 -->
+        <template #images="{ column, record }">
+          <template v-if="record[column.dataIndex].length > 0">
+            <my-image :image-list="record[column.dataIndex]"></my-image>
+          </template>
+          <template v-else> NO IMAGE</template>
         </template>
 
         <!-- 数据创建时间 -->
@@ -120,6 +128,21 @@
           </span>
         </template>
 
+        <!-- 操作列（样式二） -->
+        <template #detail="{ column, record }">
+          <span class="table-action">
+            <a-button
+              type="link"
+              size="small"
+              class="item"
+              @click="handleDetailBtnClick(record.id ?? record.userId)"
+            >
+              <template #icon><edit-outlined /></template>
+              详情
+            </a-button>
+          </span>
+        </template>
+
         <!-- 其它自定义列 -->
         <template
           v-for="item in otherSlotName"
@@ -154,6 +177,7 @@ import { getDataList } from '../../../service/main/main'
 
 import { formatUTCString } from '../../../utils/dateFormat'
 import { Season, Gender } from '../../../types/entityType'
+import MyImage from '../../../base-ui/my-image/src/my-image.vue'
 
 export default defineComponent({
   name: 'PageContent',
@@ -162,6 +186,7 @@ export default defineComponent({
     PlusOutlined,
     EditOutlined,
     DeleteOutlined,
+    MyImage,
   },
   props: {
     pageName: {
@@ -181,10 +206,10 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ['createData', 'editData', 'refreshData'],
+  emits: ['createData', 'editData', 'refreshData', 'detailData'],
   setup(props, { emit }) {
     // 分页属性
-    const pageInfo = ref({ currentPage: 1, pageSize: 5 })
+    const pageInfo = ref({ currentPage: 1, pageSize: 10 })
     // 监听分页属性改变，重新获取对应表格数据
     watch(pageInfo, async () => {
       await getPageData()
@@ -224,6 +249,11 @@ export default defineComponent({
       emit('editData', id)
     }
 
+    // 详情按钮点击事件
+    const handleDetailBtnClick = (id: string | number) => {
+      emit('detailData', id)
+    }
+
     // 刷新数据按钮点击事件
     const handleRefreshBtnClick = async () => {
       // const { list, total } = await getPageData({ skip: 0, take: 10 })
@@ -239,6 +269,8 @@ export default defineComponent({
       'action',
       'season',
       'gender',
+      'detail',
+      'images',
     ]
     // 筛选出其它动态插槽
     const otherSlotName: any = props.contentTableConfig?.tableColumns.filter(
@@ -268,6 +300,7 @@ export default defineComponent({
       handleCreateBtnClick,
       handleEditBtnClick,
       handleRefreshBtnClick,
+      handleDetailBtnClick,
     }
   },
 })

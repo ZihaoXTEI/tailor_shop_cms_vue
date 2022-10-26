@@ -43,6 +43,7 @@ import { defineComponent, PropType, ref } from 'vue'
 import { Form } from 'ant-design-vue'
 
 import { IForm, IFormItem } from '../../../base-ui/my-form'
+import dayjs from 'dayjs'
 
 const useForm = Form.useForm
 
@@ -62,6 +63,8 @@ export default defineComponent({
     formItems.forEach((item: IFormItem) => {
       if (['inputnumber'].includes(item.type)) {
         formOriginData[item.field] = 0
+      } else if (['rangepicker', 'inputrange'].includes(item.type)) {
+        formOriginData[item.field] = []
       } else {
         formOriginData[item.field] = ''
       }

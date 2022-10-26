@@ -17,6 +17,8 @@ export const contentTableConfig: ITable = {
     {
       title: '职员性别',
       dataIndex: 'staffGender',
+      slotName: 'gender',
+      align: 'center',
     },
     {
       title: '职员每月工资',

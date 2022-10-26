@@ -11,6 +11,12 @@ export const contentTableConfig: ITable = {
       dataIndex: 'fabrictypeName',
     },
     {
+      title: '布料种类',
+      dataIndex: 'fabricCategory',
+      slotName: 'fabricCategory',
+      align: 'center',
+    },
+    {
       title: '布料类型说明',
       dataIndex: 'fabrictypeRemark',
       align: 'center',

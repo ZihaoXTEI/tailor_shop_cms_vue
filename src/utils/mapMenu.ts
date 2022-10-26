@@ -1,7 +1,16 @@
 import { RouteRecordRaw } from 'vue-router'
 import Menu from '../entities/Menu'
 
-// const customer = () => import('@/views/main/user/customer/customer.vue')
+interface IRoute {
+  path: string
+  name: string
+  component: any
+}
+
+interface IBreadcrumb {
+  name: string
+  path?: string
+}
 
 // export default {
 //   path: '/main/user/customer',
@@ -28,7 +37,7 @@ export function mapMenuToRoutes(userMenu: Menu[]): RouteRecordRaw[] {
         } else {
           url = `../views/main/${moduleName}/${menu.viewName}/${menu.viewName}.vue`
         }
-        const route: Route = {
+        const route: IRoute = {
           path: `/main${menu.url}`,
           name: menu.viewName as string,
           // component: () => import(`@/views/main${menu.url}/${menuName}.vue`),
@@ -51,8 +60,42 @@ export function mapMenuToRoutes(userMenu: Menu[]): RouteRecordRaw[] {
   return routes
 }
 
-interface Route {
-  path: string
-  name: string
-  component: any
+export function pathMapBreadcrumbs(
+  userMenu: Menu[],
+  currentPath: string,
+): IBreadcrumb[] {
+  const breadcrumbs: IBreadcrumb[] = []
+
+  const pathList = currentPath.split('/')
+  const secondPath = `/${pathList[2]}`
+
+  const currentMenu = userMenu.find((menu) => menu.url === secondPath)
+  if (currentMenu) {
+    breadcrumbs.push({ name: currentMenu.menuName, path: currentMenu.url })
+  }
+
+  if (pathList.length > 3) {
+    let menu = currentMenu
+    for (let i = 3; i < pathList.length; i++) {
+      menu = menu?.childMenuList.find((item) => {
+        return item.url.includes(pathList[i])
+      })
+
+      if (menu) {
+        breadcrumbs.push({ name: menu.menuName, path: menu.url })
+      } else {
+        break
+      }
+    }
+  }
+
+  // if (pathList[3] && currentMenu && currentMenu.childMenuList.length !== 0) {
+  //   const path = currentPath.replace('/main', '')
+  //   const menu = currentMenu.childMenuList.find((menu) => menu.url === path)
+  //   if (menu) {
+  //     breadcrumbs.push({ name: menu.menuName, path: menu.url })
+  //   }
+  // }
+
+  return breadcrumbs
 }
