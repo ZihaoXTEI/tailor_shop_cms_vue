@@ -8,14 +8,21 @@
         </a-col>
       </template>
     </a-row>
+
+    <carousel></carousel>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
 
+import Carousel from './components/carousel.vue'
+
 export default defineComponent({
   name: 'DashboardPage',
+  components: {
+    Carousel,
+  },
   setup() {
     const topPanelData = reactive([
       {

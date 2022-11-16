@@ -4,6 +4,13 @@ import { IDataType } from '../../type'
 import { OptionAPI } from '../../../constants/requestApi'
 import type { MenuOptionList, OptionList } from './type'
 
+// 获取服装类型选项
+export function getClothTypeOption() {
+  return myRequest.get<IDataType<OptionList>>({
+    url: OptionAPI.ClothType,
+  })
+}
+
 // 获取布料类型选项
 export function getFabricTypeOption() {
   return myRequest.get<IDataType<OptionList>>({

@@ -22,7 +22,8 @@ export default defineConfig({
     port: 8080,
     hmr: {
       host: '127.0.0.1',
-      port: 8080,
+      port: 7878,
+      clientPort: 7878,
     },
     proxy: {
       '^/api': {

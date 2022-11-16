@@ -29,6 +29,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to) => {
+  console.log(routes)
   if (to.path !== '/login') {
     const token = _sessionStorage.getItem(
       `${StorageKey.STORE_PREFIX}-login`,

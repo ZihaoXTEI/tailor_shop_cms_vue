@@ -37,6 +37,7 @@ export enum FileAPI {
 }
 
 export enum OptionAPI {
+  ClothType = '/option/clothtype',
   FabricType = '/option/fabrictype',
   Fabric = '/option/fabric',
   Supplier = '/option/supplier',
